@@ -24,6 +24,7 @@ def get_user_input():
                         help="The word the recognize.", type=str)
     parser.add_argument("--clear-logs", action="store_true",
                         dest="clear_logs", required=False)
+    parser.add_argument("--verbose",action="store_true",dest="verbose",required=False)
     args = parser.parse_args()
     return args
 
@@ -120,7 +121,10 @@ if __name__ == "__main__":
                     print(prompt)
                     save_logs(prompt)
                 else:
-                    pass
+                    if args.verbose:
+                        print("Recognized word: " + i)
+                    else:
+                        pass
     except KeyboardInterrupt:
         print("Quiting.")
         quit()
