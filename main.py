@@ -2,6 +2,23 @@ import time
 import speech_recognition as sr
 import argparse
 
+class bcolors:
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKGREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+
+    def disable(self):
+        self.HEADER = ''
+        self.OKBLUE = ''
+        self.OKGREEN = ''
+        self.WARNING = ''
+        self.FAIL = ''
+        self.ENDC = ''
+
+bcolors = bcolors()
 
 def save_logs(logs):
 
@@ -101,6 +118,7 @@ if __name__ == "__main__":
         file.write(f"The word is: {word.capitalize()}.\n")
 
     print("Listening...")
+    counter = 0
     try:
         while True:
             speech = recognize_speech_from_mic(recognizer, microphone, language)
@@ -109,15 +127,17 @@ if __name__ == "__main__":
             for i in words:
                 i = str(i).lower()
                 if i == word:
-                    prompt = f"[+] You said {i}."
+                    counter += 1
+                    print(+"Total count: " + counter)
+                    prompt = bcolors.OKGREEN +"[+] You said " + i + "." + bcolors.ENDC
                     print(prompt)
                     save_logs(prompt)
                 elif word in i:
-                    prompt = f"[?] In the {word}, found {i}. It might be misunderstood."
+                    prompt = bcolors.WARNING+f"[?] In the {word}, found {i}. It might be misunderstood."+bcolors.ENDC
                     print(prompt)
                     save_logs(prompt)
                 elif i in word:
-                    prompt = f"[?] In the {i}, found {word}. It might be misunderstood."
+                    prompt =bcolors.WARNING+ f"[?] In the {i}, found {word}. It might be misunderstood."+bcolors.ENDC
                     print(prompt)
                     save_logs(prompt)
                 else:
